@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
+  <table name="HTCOMPETITOR" idMethod="native" phpName="Htcompetitor">
+    <column name="number" phpName="Number" type="VARCHAR" size="255" primaryKey="true" required="true"/>
+    <column name="category" phpName="Category" type="VARCHAR" size="255"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="TEAM" idMethod="native" phpName="Team">
+    <column name="ID" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <unique name="name">
+      <unique-column name="name"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="TEAM_MEMBER" idMethod="native" phpName="TeamMember">
+    <column name="number" phpName="Number" type="VARCHAR" size="255" primaryKey="true" required="true"/>
+    <column name="category" phpName="Category" type="VARCHAR" size="255"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="TEAM_TEAM_MEMBER" idMethod="native" phpName="TeamTeamMember">
+    <column name="TEAM_ID" phpName="TeamId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="members_number" phpName="MembersNumber" type="VARCHAR" size="255" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="TEAM_MEMBER" name="FK_TEAM_TEAM_MEMBER_members_number">
+      <reference local="members_number" foreign="number"/>
+    </foreign-key>
+    <foreign-key foreignTable="TEAM" name="FK_TEAM_TEAM_MEMBER_TEAM_ID">
+      <reference local="TEAM_ID" foreign="ID"/>
+    </foreign-key>
+    <index name="FK_TEAM_TEAM_MEMBER_members_number">
+      <index-column name="members_number"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="competitor" idMethod="native" phpName="Competitor">
+    <column name="ID" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="category" phpName="Category" type="VARCHAR" size="255"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="number" phpName="Number" type="VARCHAR" size="255"/>
+    <column name="team" phpName="Team" type="VARCHAR" size="255"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="competitor_competitorresults" idMethod="native" phpName="CompetitorCompetitorresults">
+    <column name="ID" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="competitor_ID" phpName="CompetitorId" type="INTEGER" required="true"/>
+    <column name="COMPETITORRESULTS" phpName="Competitorresults" type="DOUBLE"/>
+    <column name="COMPETITORRESULTS_KEY" phpName="CompetitorresultsKey" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="competitor" name="FK_competitor_COMPETITORRESULTS_competitor_ID">
+      <reference local="competitor_ID" foreign="ID"/>
+    </foreign-key>
+    <index name="FK_competitor_COMPETITORRESULTS_competitor_ID">
+      <index-column name="competitor_ID"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="meet" idMethod="native" phpName="Meet">
+    <column name="ID" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="date" phpName="Date" type="DATE"/>
+    <column name="description" phpName="Description" type="VARCHAR" size="255"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="meet_competitor" idMethod="native" phpName="MeetCompetitor">
+    <column name="meet_ID" phpName="MeetId" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="competitors_ID" phpName="CompetitorsId" type="INTEGER" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="competitor" name="FK_MEET_COMPETITOR_competitors_ID">
+      <reference local="competitors_ID" foreign="ID"/>
+    </foreign-key>
+    <foreign-key foreignTable="meet" name="FK_MEET_COMPETITOR_meet_ID">
+      <reference local="meet_ID" foreign="ID"/>
+    </foreign-key>
+    <index name="FK_MEET_COMPETITOR_competitors_ID">
+      <index-column name="competitors_ID"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="meet_teams" idMethod="native" phpName="MeetTeams">
+    <column name="ID" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="meet_ID" phpName="MeetId" type="INTEGER"/>
+    <column name="TEAMS" phpName="Teams" type="VARCHAR" size="255"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+</database>
