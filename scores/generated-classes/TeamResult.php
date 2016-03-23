@@ -61,14 +61,18 @@ class TeamResult implements MSConstants {
 	private function computeVarsityEventScore($eventScores, $event, $minOptionalScores) {
 		if (array_key_exists($event, $eventScores)) {
 			$oCount = 0;
+			$spliceIndices = array();
 			for ($i=0; $i<count($eventScores[$event]) && $oCount<$minOptionalScores; $i++) {
 				$iScore = $eventScores[$event][$i];
 				if ($iScore->isOptional) {
 					array_push($this->includedScores, $iScore);
 					$this->score += $iScore->score;
-					array_splice($eventScores[$event], $i, 1);
+					array_push($spliceIndices,$i);
 					++$oCount;
 				}
+			}
+			for ($j=count($spliceIndices)-1; $j>=0; $j--) {
+				array_splice($eventScores[$event], $spliceIndices[$j], 1);
 			}
 			// Add the remaining (VARSITY_COUNT-minOptionalScores) highest scores
 			for ($i=0; $i<min(count($eventScores[$event]),(self::VARSITY_COUNT-$minOptionalScores)); $i++) {
