@@ -1,6 +1,7 @@
 <?php
 require_once 'vendor/autoload.php';
 require "checkAuth.php";
+$version="2";
 ?>
 
 <html>
@@ -8,12 +9,12 @@ require "checkAuth.php";
 <title>LCC Gymnastics Scoring Program</title>
 <link rel="stylesheet" href="css/south-street/jquery-ui-1.10.4.custom.css" />
 <link rel="stylesheet" href="css/multiselect.css"></link>
-<link rel="stylesheet" href="css/ezscore.css"></link>
+<link rel="stylesheet" href="css/ezscore.css?build=<?=$version?>"></link>
 <script src="js/spin.min.js"></script>
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="js/jquery-multiselect.min.js"></script>
-<script src="js/ezscore.js"></script>
+<script src="js/ezscore.js?build=<?=$version?>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	new EZScoreApp();
