@@ -1,6 +1,6 @@
 <?php
 
-class TeamResult implements MSConstants {
+class TeamResult extends Constants implements MSConstants {
 	public $team;
 	public $teamScores;
 	public $includedScores;
@@ -21,9 +21,9 @@ class TeamResult implements MSConstants {
 		$this->score = 0.0;
 		if ($this->teamScores==NULL) return;
 		$eventScores = $this->collateAndSortEventScores();
-		if ($event == MSConstants::ALLAROUND) { // All around is treated as the overall team score. Compute differently
-			foreach (self::EventTypes as $e) {
-				if ($e == MSConstants::ALLAROUND) continue; // Exclude AA for team scores
+		if ($event == 'ALLAROUND') { // All around is treated as the overall team score. Compute differently
+			foreach (self::$EventTypes as $e) {
+				if ($e == 'ALLAROUND') continue; // Exclude AA for team scores
 				$this->computeJVEventScore($eventScores, $e);
 			}
 		} else { // Individual Event team score
