@@ -41,6 +41,38 @@ var TEAM_HEADERS = {
 				modal: true
 			}).append($("<div/>", {'class': 'messageBox'}).append(message));
 		},
+		prompt: function(message, title, initialValue, validateCallback, okCallback) {
+			var dlg = $('<div/>', {id: 'inputDialog'}).append($('<div/>', { 'class': 'messageBox' }).text(message));
+			var initVal = initialValue || '';
+			dlg.append($('<input/>', {id: 'dlg_text', style: 'width: 100%;', name: 'dlg_text', value: initVal}));
+			var okHandler = function() {
+				var slName = $("#inputDialog input").val();
+				if (validateCallback(slName, $('#dlg_text'))) {
+					dlg.dialog("close");
+					dlg.remove();
+					okCallback(slName);
+				}
+			};
+			dlg.keypress(function(e) {
+				if (e.keyCode == $.ui.keyCode.ENTER) {
+					okHandler();
+				}
+			});
+			dlg.dialog({
+				modal: true,
+				title: title,
+				buttons: [
+					{text: 'OK', click: okHandler },
+					{text: 'Cancel', click:
+						function() {
+							dlg.dialog("close");
+						}
+					}],
+				position: { my: "center", at: "center"},
+				minWidth: 600,
+				close: function(){ dlg.remove(); }
+			});
+		},
 		confirm: function(message, title, callback) {
 			$("<div></div>").dialog( {
 				buttons: [{
@@ -991,8 +1023,24 @@ EZScoreApp.prototype = {
 		var print=$('<button>', {type: 'button'}).button({label: 'Print...'});
 		print.click({isTeam: isTeam}, this.printView.bind(this));
 		btnDiv.append(print);
+		var exportBtn=$('<button>', {type: 'button'}).button({label: 'Export...'});
+		exportBtn.click(this.exportResults.bind(this));
+		btnDiv.append(exportBtn);
 		outerDiv.append(btnDiv);
 		$('#topNav').append(outerDiv);
+	},
+	exportResults: function(e) {
+		$.prompt('How many places?', 'Export Results', '6', function(val, ele) {
+			if (!$.isNumeric(val)) {
+				$.alert("Please enter a valid number!");
+				ele.focus();
+				return false;
+			}
+			return true;
+		},
+		function(val) {
+			window.location = 'export.php?meetId='+this.currentMeet.Id+'&toPlace='+val;
+		}.bind(this));
 	},
 	printView: function(e) {
 		var resultsPage = undefined;
