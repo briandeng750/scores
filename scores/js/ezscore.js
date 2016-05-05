@@ -110,6 +110,13 @@ function EZScorePrint(meetID, page) {
 	
 }
 
+var windowResized = function () {
+	var height = $(window).height() - $('#top').height() - $('#topNav').height() - 20;
+	var root = $('#root');
+	root.height(height);
+};
+$(window).resize(windowResized);
+
 function EZScoreApp(meetID, page) {
 	this.teamList = [];
 	this.homeTeam = localStorage.getItem('homeTeam');
@@ -156,7 +163,7 @@ function EZScoreApp(meetID, page) {
 							root.append(evtTable);
 						}
 						if (j%2==1) {
-							evtRow = $('<tr/>');
+							evtRow = $('<tr/>', {'class': 'breakAfter'});
 							evtTable.append(evtRow);
 						}
 						var evtCell = $('<td/>');
@@ -209,6 +216,7 @@ function EZScoreApp(meetID, page) {
 				$('#deleteTeamMember').button('disable');
 			}
 		});
+		windowResized();
 	}
 }
 EZScoreApp.prototype = {
@@ -656,6 +664,7 @@ EZScoreApp.prototype = {
 			autoOpen: true,
 			modal: true,
 			title: title,
+			position: {my: "center", at: "center", of: 'body'},
 			buttons: buttons,
 			minWidth: 600
 		});

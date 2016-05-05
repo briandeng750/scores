@@ -1,6 +1,12 @@
-body {
+	body {
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1em;
+}
+#root {
+	width: 100%;
+	height: 200px;
+	overflow-y: auto;
+	position: absolute;	
 }
 table.meetResults {
 	width: 100%;
@@ -164,4 +170,8 @@ button.configBtn {
 textarea.fillWidth {
 	width: 100%;
 	box-sizing: border-box;
+}
+@media print {
+	table { page-break-inside:auto; }
+	.breakAfter { display: block; page-break-after: always; vertical-align: top;}
 }
