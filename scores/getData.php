@@ -79,15 +79,16 @@ function getMeet($id) {
 	return Meet::getMeet($id)->toJson();
 }
 
-function newMeet($desc,$date,$teams,$homeTeam) {
+function newMeet($desc,$date,$teams,$categories,$homeTeam) {
 	$meet = new Meet();
 	$meet->setDescription($desc);
 	$meet->setDate($date);
 	$teamAry = explode(",", $teams);
+	$catAry = explode(",", $categories);
 	$meet->save();
 	foreach ($teamAry as $team) {
 		$meet->addTeam($team);
-		$meet->loadTeamMembers($team);
+		$meet->loadTeamMembers($team,$catAry);
 	}
 	$meet->save();
 	return json_encode($meet);
@@ -361,8 +362,9 @@ try {
 			$desc = $_POST["description"];
 			$date = $_POST["date"];
 			$teams = $_POST["teams"];
+			$categories = $_POST["categories"];
 			$homeTeam = $_POST["homeTeam"];
-			echo newMeet($desc,$date,$teams,$homeTeam);
+			echo newMeet($desc,$date,$teams,$categories,$homeTeam);
 			break;
 		case "deleteMeet":
 			echo deleteMeet($_POST["meetID"]);

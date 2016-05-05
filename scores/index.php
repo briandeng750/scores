@@ -1,7 +1,7 @@
 <?php
 require_once 'vendor/autoload.php';
 require "checkAuth.php";
-$version="2";
+$version="3";
 ?>
 
 <html>
@@ -151,6 +151,12 @@ $(document).ready(function() {
 		</div>
 		<div class="dlgRow">
 			<select id="meetTeams" multiple="multiple"></select>
+		</div>
+		<div class="dlgRow">
+			<label class="dlgLabel" for="meetCats">Categories:</label>
+		</div>
+		<div class="dlgRow">
+			<select id="meetCats" multiple="multiple"></select>
 		</div>
 	</div>
 	<div id="newCompetitorDlg" style="display: none;">

@@ -45,11 +45,12 @@ class Meet extends BaseMeet implements MSConstants
 	public function getTeamResults($minOptionalScores) {
 		return new TeamResults($this, $minOptionalScores);
 	}
-	public function loadTeamMembers($teamName) {
+	public function loadTeamMembers($teamName,$catAry) {
 		$team = Team::getTeam($teamName);
 		if (!$team) throw new Exception("Cannot find team: $teamName");
 		$teamMembers = $team->getTeamMembers();
 		foreach ($teamMembers as $m) {
+			if (!in_array($m->getCategory(),$catAry)) continue;
 			$c = new Competitor();
 			$c->setNumber($m->getNumber());
 			$c->setCategory($m->getCategory());

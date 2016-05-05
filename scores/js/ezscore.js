@@ -196,6 +196,10 @@ function EZScoreApp(meetID, page) {
 		$('#editTeamMember').button().click(this.editTeamMemberDlg.bind(this));
 		$('#deleteTeamMember').button().click(this.deleteTeamMemberDlg.bind(this));		
 		$('#meetTeams').multiselect({ selectedList: 6});
+		$('#meetCats').append($('<option></option>', {value: 'JV', 'selected':'selected'}).text('JV'));
+		$('#meetCats').append($('<option></option>', {value: 'VC', 'selected':'selected'}).text('VC'));
+		$('#meetCats').append($('<option></option>', {value: 'VO', 'selected':'selected'}).text('VO'));
+		$('#meetCats').multiselect({ selectedList: 3});
 		$('#teamName').on('keypress', function(e) {
 			if (e.keyCode == 13) {
 				this.addTeam();
@@ -359,6 +363,8 @@ EZScoreApp.prototype = {
 	},
 	addMeetDlg: function() {
 		$('#meetTeams').multiselect("refresh");
+		$('#meetCats option').prop('selected', true);
+		$('#meetCats').multiselect("refresh");
 		$('#newMeetDlg').dialog({
 			autoOpen: true,
 			modal: true,
@@ -492,6 +498,12 @@ EZScoreApp.prototype = {
 			$('#meetTeams').focus();
 			return;
 		}
+		var cats = $('#meetCats').val();
+		if (!cats || cats.length<1) {
+			$.alert("Please select at least 1 category for the Meet");
+			$('#meetCats').focus();
+			return;
+		}
 		this.showSpinner();
 		$.ajax({ type: 'POST', url: 'getData.php',
 			data: { 
@@ -499,6 +511,7 @@ EZScoreApp.prototype = {
 				'description': desc,
 				'date': date,
 				'teams' : teams.join(),
+				'categories' : cats.join(),
 				'homeTeam' : this.homeTeam
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -533,23 +546,26 @@ EZScoreApp.prototype = {
 		.done(function(msg) {
 			var meet = $.parseJSON(msg);
 			this.currentMeet = meet;
+			var hdrDiv = $('<div/>', {'class':'header-background'});
+			var ctrDiv = $('<div/>', {'class':'fixed-table-container-inner'});
+			$('#root').append(hdrDiv).append(ctrDiv);
 			var table = $('<table></table>', {class: 'meetResults'});
 			var tbody = $('<tbody></tbody>');
 			var tr;
 			var headrow = $('<tr>');
-			headrow.append($('<th/>', {class: 'col18px'}).append('&nbsp;'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('#'));
-			headrow.append($('<th/>', {class: 'col20pc'}).append('Name'));
-			headrow.append($('<th/>', {class: 'col15pc'}).append('Team'));
-			headrow.append($('<th/>', {class: 'col5pc'}).append('Category'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('Vault'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('Bars'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('Beam'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('Floor'));
-			headrow.append($('<th/>', {class: 'col10pc'}).append('All-Around'));
+			headrow.append($('<th/>', {class: 'col18px'}).append($('<div/>', {'class':'th-inner'}).html('&nbsp;')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('#')));
+			headrow.append($('<th/>', {class: 'col20pc'}).append($('<div/>', {'class':'th-inner'}).text('Name')));
+			headrow.append($('<th/>', {class: 'col15pc'}).append($('<div/>', {'class':'th-inner'}).text('Team')));
+			headrow.append($('<th/>', {class: 'col5pc'}).append($('<div/>', {'class':'th-inner'}).text('Cat.')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('Vault')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('Bars')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('Beam')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('Floor')));
+			headrow.append($('<th/>', {class: 'col10pc'}).append($('<div/>', {'class':'th-inner'}).text('All-Around')));
 			tbody.append(headrow);
 			table.append(tbody);			
-			$('#root').append(table);
+			ctrDiv.append(table);
 			var competitors = [];
 			if (meet.hasOwnProperty('MeetCompetitors')) {
 				for (var j=0; j<meet['MeetCompetitors'].length; j++) {
