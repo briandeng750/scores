@@ -172,6 +172,5 @@ textarea.fillWidth {
 	box-sizing: border-box;
 }
 @media print {
-	table { page-break-inside:auto; }
-	.breakAfter { display: block; page-break-after: always; vertical-align: top;}
+	tr.breakBefore { display: block; page-break-before: always; vertical-align: top;}
 }

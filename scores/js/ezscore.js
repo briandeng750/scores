@@ -163,7 +163,7 @@ function EZScoreApp(meetID, page) {
 							root.append(evtTable);
 						}
 						if (j%2==1) {
-							evtRow = $('<tr/>', {'class': 'breakAfter'});
+							evtRow = $('<tr/>', {'class': 'breakBefore'});
 							evtTable.append(evtRow);
 						}
 						var evtCell = $('<td/>');
